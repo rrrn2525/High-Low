@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>High & Low</title>
+<style>
+    body {
+        font-family: "Yu Gothic", sans-serif;
+        background: #f0f0f0;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .game-box {
+        background: white;
+        padding: 30px 40px;
+        border: 2px solid #333;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .card-area {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .card {
+        width: 120px;
+        height: 170px;
+        border: 2px solid #000;
+        border-radius: 10px;
+        background: white;
+        font-size: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .back {
+        background: repeating-linear-gradient(
+            45deg,
+            #009,
+            #009 10px,
+            #fff 10px,
+            #fff 20px
+        );
+    }
+
+    .btn {
+        font-size: 22px;
+        padding: 10px 30px;
+        margin: 15px;
+        border-radius: 10px;
+        cursor: pointer;
+        border: none;
+    }
+
+    .low { background: #87cefa; }
+    .high { background: #ff7f7f; }
+
+    .end-btn { background: #ccc; }
+    .retry-btn { background: #90ee90; }
+
+    #result {
+        font-size: 26px;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    #after-buttons {
+        margin-top: 20px;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="game-box">
+    <div class="card-area">
+        <div>
+            <div>CPU</div>
+            <div class="card" id="cpu-card">?</div>
+        </div>
+
+        <div>
+            <div>Player</div>
+            <div class="card back" id="player-card"></div>
+        </div>
+    </div>
+
+    <button class="btn low" onclick="chooseHL('l')">↓ Low ↓</button>
+    <button class="btn high" onclick="chooseHL('h')">↑ High ↑</button>
+
+    <div id="result"></div>
+
+    <div id="after-buttons">
+        <button class="btn end-btn" onclick="closeGame()">終わる</button>
+        <button class="btn retry-btn" onclick="retry()">もう一回</button>
+    </div>
+</div>
+
+<script>
+    // PythonのロジックをJS化
+    const card_values = {
+        "A": 1, "2": 2, "3": 3, "4": 4, "5": 5,
+        "6": 6, "7": 7, "8": 8, "9": 9, "10": 10,
+        "J": 11, "Q": 12, "K": 13
+    };
+
+    const cards = Object.keys(card_values);
+
+    let cpu_card = "";
+    let player_card = "";
+
+    window.onload = function() {
+        drawCards();
+    };
+
+    function drawCards() {
+        cpu_card = cards[Math.floor(Math.random() * cards.length)];
+        player_card = cards[Math.floor(Math.random() * cards.length)];
+
+        document.getElementById("cpu-card").textContent = cpu_card;
+
+        const p = document.getElementById("player-card");
+        p.classList.add("back");
+        p.textContent = "";
+
+        document.getElementById("result").textContent = "";
+        document.getElementById("after-buttons").style.display = "none";
+    }
+
+    function chooseHL(choice) {
+        const cpu_value = card_values[cpu_card];
+        const player_value = card_values[player_card];
+
+        const p = document.getElementById("player-card");
+        p.classList.remove("back");
+        p.textContent = player_card;
+
+        // 引き分け
+        if (cpu_value === player_value) {
+            document.getElementById("result").textContent = "引き分け → 引き直し";
+            drawCards();
+            return;
+        }
+
+        // High
+        if (choice === "h") {
+            if (player_value > cpu_value) {
+                document.getElementById("result").textContent = "あなたの勝ち！";
+            } else {
+                document.getElementById("result").textContent = "あなたの負け…";
+            }
+        }
+
+        // Low
+        if (choice === "l") {
+            if (player_value < cpu_value) {
+                document.getElementById("result").textContent = "あなたの勝ち！";
+            } else {
+                document.getElementById("result").textContent = "あなたの負け…";
+            }
+        }
+
+        // 勝敗が出たらボタン表示
+        document.getElementById("after-buttons").style.display = "block";
+    }
+
+    // 終わる → タブを閉じる
+    function closeGame() {
+        window.close();
+    }
+
+    // もう一回 → BET画面に戻る
+    function retry() {
+        window.location.href = "file:///C:/Users/C25034/Desktop/python/money.html";
+    }
+</script>
+
+</body>
+</html>

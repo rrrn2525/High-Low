@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>BET画面</title>
+<style>
+    body {
+        font-family: "Yu Gothic", sans-serif;
+        background: #f0f0f0;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bet-box {
+        text-align: center;
+        background: white;
+        padding: 30px 40px;
+        border: 2px solid #333;
+        border-radius: 10px;
+    }
+
+    .title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .arrow {
+        font-size: 40px;
+        cursor: pointer;
+        user-select: none;
+        line-height: 40px;
+    }
+
+    .amount-box {
+        font-size: 32px;
+        border: 2px solid #333;
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin: 10px 0;
+        display: inline-block;
+        min-width: 180px;
+    }
+
+    .enter-text {
+        margin-top: 20px;
+        font-size: 20px;
+        color: #555;
+    }
+</style>
+</head>
+<body>
+
+<div class="bet-box">
+    <div class="title">いくら賭けますか</div>
+
+    <div class="arrow" onclick="changeBet(1000)">▲</div>
+
+    <div class="amount-box">
+        ¥ <span id="bet">0</span>
+    </div>
+
+    <div class="arrow" onclick="changeBet(-1000)">▼</div>
+
+    <div class="enter-text">Enterで決定</div>
+</div>
+
+<script>
+    let bet = 0;
+
+    function changeBet(value) {
+        bet += value;
+        if (bet < 0) bet = 0;
+        document.getElementById("bet").textContent = bet.toLocaleString();
+    }
+
+    // Enterで次の画面へ
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            // ★ High&Low の画面へ移動
+            window.location.href = "file:///C:/Users/C25034/Desktop/python/game.html?bet=" + bet;
+        }
+    });
+</script>
+
+</body>
+</html>
